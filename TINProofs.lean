@@ -24,4 +24,10 @@ import TINProofs.C5.Defs
 import TINProofs.C5.ThreeFactor
 import TINProofs.C5.ChainProperties
 import TINProofs.C5.Classification
+import TINProofs.C6.Defs
+import TINProofs.C6.LowerBound
+import TINProofs.C6.UpperBound
+import TINProofs.C6.AhlforsCovering
+import TINProofs.C7.Defs
+import TINProofs.C7.SupportFailure
 import TINProofs.Statements

@@ -1,5 +1,5 @@
 /-
-  Paper-to-Lean cross-reference for TINProofs C1–C5.
+  Paper-to-Lean cross-reference for TINProofs C1-C7.
 
   Each section quotes the manuscript theorem in natural language,
   then checks the corresponding Lean declaration. The #check commands
@@ -12,6 +12,8 @@
     C3  Proposition C1 (Lyapunov radius of validity)
     C4  Lemma 2.6      (temporal transport factorization)
     C5  Proposition 2.7 (three-factor sparse law)
+    C6  Theorem 1      (Ahlfors covering and volume scaling)
+    C7  Theorem 2      (support failure via rate-distortion)
 -/
 import TINProofs.C1.Crossover
 import TINProofs.C2.Absorbing
@@ -23,6 +25,8 @@ import TINProofs.C4.BraessLocalization
 import TINProofs.C5.ThreeFactor
 import TINProofs.C5.ChainProperties
 import TINProofs.C5.Classification
+import TINProofs.C6.AhlforsCovering
+import TINProofs.C7.SupportFailure
 
 -- ═══════════════════════════════════════════════════════════════════
 -- C1. Commodity Hull Theorem  (Theorem 6.3)
@@ -233,3 +237,38 @@ import TINProofs.C5.Classification
 #check @TINProofs.C5.morphologySlope
 #check @TINProofs.C5.isTrap
 #check @TINProofs.C5.isCluster
+
+
+-- ===================================================================
+-- C6. Ahlfors Covering and Volume Scaling  (Theorem 1)
+-- ===================================================================
+
+/- **Paper.** Under Ahlfors gamma-regularity, the covering number
+    N_U(epsilon) satisfies A1 |U| epsilon^{-gamma} <= N_U(epsilon)
+    <= A2 |U| epsilon^{-gamma}, with A1 = 1/C2 and A2 = 2^gamma/C1.
+    The packing-to-covering step is represented by the structural
+    hypothesis N_U(epsilon) <= M.
+
+    **Lean.** `covering_lower_bound`, `covering_upper_bound`,
+    `ahlfors_covering`, `ansatz_validity`. -/
+#check @TINProofs.C6.covering_lower_bound
+#check @TINProofs.C6.covering_upper_bound
+#check @TINProofs.C6.ahlfors_covering
+#check @TINProofs.C6.ansatz_validity
+
+
+-- ===================================================================
+-- C7. Support Failure via Rate-Distortion  (Theorem 2)
+-- ===================================================================
+
+/- **Paper.** Under the Markov chain Y -> Z -> Y_hat and capacity
+    bound I(Y;Z) <= C_b, achieving resolution eps requires
+    R(eps) <= C_b. Below the threshold eps_star, no reconstruction
+    achieves resolution eps.
+
+    **Lean.** `support_necessary`, `support_failure`,
+    `below_threshold_unsupportable`, `eps_star_le_eps_eff`. -/
+#check @TINProofs.C7.support_necessary
+#check @TINProofs.C7.support_failure
+#check @TINProofs.C7.below_threshold_unsupportable
+#check @TINProofs.C7.eps_star_le_eps_eff
