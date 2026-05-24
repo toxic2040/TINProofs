@@ -30,4 +30,6 @@ import TINProofs.C6.UpperBound
 import TINProofs.C6.AhlforsCovering
 import TINProofs.C7.Defs
 import TINProofs.C7.SupportFailure
+import TINProofs.C8.Defs
+import TINProofs.C8.BoundaryRedescription
 import TINProofs.Statements

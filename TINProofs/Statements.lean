@@ -1,5 +1,5 @@
 /-
-  Paper-to-Lean cross-reference for TINProofs C1-C7.
+  Paper-to-Lean cross-reference for TINProofs C1-C8.
 
   Each section quotes the manuscript theorem in natural language,
   then checks the corresponding Lean declaration. The #check commands
@@ -14,6 +14,7 @@
     C5  Proposition 2.7 (three-factor sparse law)
     C6  Theorem 1      (Ahlfors covering and volume scaling)
     C7  Theorem 2      (support failure via rate-distortion)
+    C8  Theorem 3      (boundary re-description)
 -/
 import TINProofs.C1.Crossover
 import TINProofs.C2.Absorbing
@@ -27,6 +28,7 @@ import TINProofs.C5.ChainProperties
 import TINProofs.C5.Classification
 import TINProofs.C6.AhlforsCovering
 import TINProofs.C7.SupportFailure
+import TINProofs.C8.BoundaryRedescription
 
 -- ═══════════════════════════════════════════════════════════════════
 -- C1. Commodity Hull Theorem  (Theorem 6.3)
@@ -272,3 +274,20 @@ import TINProofs.C7.SupportFailure
 #check @TINProofs.C7.support_failure
 #check @TINProofs.C7.below_threshold_unsupportable
 #check @TINProofs.C7.eps_star_le_eps_eff
+
+
+-- ===================================================================
+-- C8. Boundary Re-description  (Theorem 3)
+-- ===================================================================
+
+/- **Paper.** Support failure forces the interior description to
+    factor through an optimal boundary summary Z* at the threshold
+    resolution eps_star. Any exterior reconstruction has eps_eff >= eps_star.
+    At the threshold, R(eps_star) = C_b (channel saturated).
+    Below the threshold, R(eps) > C_b (causally disconnected).
+
+    **Lean.** `resolution_floor`, `boundary_summary_optimal`,
+    `boundary_redescription`. -/
+#check @TINProofs.C8.resolution_floor
+#check @TINProofs.C8.boundary_summary_optimal
+#check @TINProofs.C8.boundary_redescription
