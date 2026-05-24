@@ -24,3 +24,4 @@ import TINProofs.C5.Defs
 import TINProofs.C5.ThreeFactor
 import TINProofs.C5.ChainProperties
 import TINProofs.C5.Classification
+import TINProofs.Statements
