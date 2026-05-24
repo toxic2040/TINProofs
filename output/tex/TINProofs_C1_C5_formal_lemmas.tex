@@ -1,0 +1,383 @@
+\documentclass[10pt,oneside]{book}
+
+\usepackage{tin_tome}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{needspace}
+
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.26em}
+\setstretch{1.03}
+\raggedbottom
+\sloppy
+
+\titlespacing*{\section}{0pt}{0.6em}{0.45em}
+\titlespacing*{\subsection}{0pt}{0.6em}{0.25em}
+
+\newcommand{\lean}[1]{{\footnotesize\color{muted}\texttt{\detokenize{#1}}}}
+\newcommand{\statement}[3]{%
+  \Needspace{3\baselineskip}%
+  \noindent{\color{chapterbrown}\bfseries #1}\par
+  \lean{#2}\par
+  #3\par\vspace{0.25em}%
+}
+\newcommand{\support}[1]{%
+  {\footnotesize\color{muted}\raggedright #1\par}\vspace{0.18em}%
+}
+\newcommand{\problem}[2]{%
+  \clearpage
+  \section*{#1. #2}
+  \markright{#1. #2}
+}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\DR}{\operatorname{DR}}
+\newcommand{\ST}{S_{\mathrm{T}}}
+\newcommand{\etaL}{\eta_{\mathrm{lyap}}}
+\newcommand{\PhiR}{\Phi}
+\newcommand{\Pois}{\operatorname{Pois}}
+\newcommand{\Binom}{\operatorname{Binom}}
+\newcommand{\BigO}{\mathcal{O}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\univ}{\mathrm{univ}}
+\newcommand{\Icc}{\operatorname{Icc}}
+\newcommand{\atTop}{\mathrm{atTop}}
+
+\begin{document}
+\thispagestyle{plain}
+
+\begin{center}
+{\Large\bfseries\color{chapterbrown} TINProofs C1-C5}\par
+{\large Formal Lemmas and Theorems}\par
+\vspace{0.4em}
+{\small J. Councilman}\par
+{\small May 24, 2026}
+\end{center}
+
+\vspace{0.4em}
+{\color{rulecolor}\hrule height 0.5pt}
+\vspace{0.8em}
+
+\section*{C1. Commodity Hull Theorem}
+\markright{C1. Commodity Hull Theorem}
+
+\textsc{Notation.}
+For a feasible path \(p=(T_p,Q_p)\), define
+\[
+  A_p(\lambda)=-\log Q_p+\lambda T_p,
+  \qquad
+  V_p(\lambda)=\log Q_p-\lambda T_p.
+\]
+For a finite nonempty hull \(C\),
+\[
+  F_C(\lambda)=\inf_{p\in C}A_p(\lambda),
+  \qquad
+  V_C(\lambda)=\sup_{p\in C}V_p(\lambda).
+\]
+
+\statement{Affine path action and value}
+{action_affine; value_affine; action_neg_value}
+{For \(a,b\geq 0\) with \(a+b=1\),
+\[
+  A_p(a\lambda_1+b\lambda_2)
+  =aA_p(\lambda_1)+bA_p(\lambda_2),
+  \qquad
+  V_p(a\lambda_1+b\lambda_2)
+  =aV_p(\lambda_1)+bV_p(\lambda_2),
+\]
+and \(A_p(\lambda)=-V_p(\lambda)\).}
+\support{Convexity and concavity corollaries: \lean{action_convexOn; action_concaveOn; value_convexOn; value_concaveOn}.}
+
+\statement{Finite hull support and value duality}
+{support_concaveOn; valueFn_eq_neg_support; valueFn_convexOn; legendre_duality}
+{The finite lower envelope \(F_C\) is concave on \(\univ\), the finite upper envelope \(V_C\) is convex on \(\univ\), and
+\[
+  V_C(\lambda)=-F_C(\lambda).
+\]
+This is the formal Legendre-duality surface for the finite path hull.}
+
+\statement{Crossover equality}
+{action_eq_at_crossover}
+{For distinct exposures \(T_i\neq T_j\), set
+\[
+  \lambda_{ij}
+  =\frac{\log Q_j-\log Q_i}{T_j-T_i}.
+\]
+Then the path actions agree exactly:
+\[
+  A_i(\lambda_{ij})=A_j(\lambda_{ij}).
+\]}
+
+\statement{Crossover ordering}
+{action_lt_below_crossover; action_gt_above_crossover}
+{If \(T_i<T_j\), then
+\[
+  \lambda<\lambda_{ij}\Rightarrow A_j(\lambda)<A_i(\lambda),
+  \qquad
+  \lambda_{ij}<\lambda\Rightarrow A_i(\lambda)<A_j(\lambda).
+\]
+Thus the theorem identifies both the crossing point and the side on which each path is selected.}
+
+\problem{C2}{Stochastic Certification Asymmetry}
+
+\textsc{Notation.}
+Let \(k>0\) be the reserve-cycle count, let tier thresholds be
+\(\tau_i\in(0,1)\), and define the integer cutoff
+\[
+  x_i=\left\lceil k\tau_i\right\rceil.
+\]
+For \(X\sim\Binom(n,p)\),
+\[
+  B_{n,p}(j)=\binom{n}{j}p^j(1-p)^{n-j}.
+\]
+
+\statement{Absorbing lowest-tier cutoff}
+{ceil_mean_lt_xMin_of_lt_sub_one; median_lt_xMin_of_median_le_ceil_mean; absorbing_lowest_tier_median_lt_cutoff}
+{If \(p\geq0\) and
+\[
+  np < k\tau_i-1,
+\]
+then
+\[
+  \left\lceil np\right\rceil < x_i.
+\]
+Consequently, any median \(m\) with \(m\leq\lceil np\rceil\) lies below the same cutoff.  The lowest-tier theorem is this statement specialized to the final threshold \(i=i_{\min}\).}
+\support{The mode consequence is recorded separately as \lean{mode_lt_xMin_of_mode_le_median}.}
+
+\statement{Tier asymmetry as finite sums}
+{TierSystem.xMin_pos; binomialCDF_pred_eq_sum_range; tierAsymmetryRatio_eq_binomial_sums}
+{The tier-specific downgrade-to-upgrade asymmetry ratio is exactly
+\[
+  R_{T,T^-}
+  =
+  \frac{\sum_{j=0}^{x_T-1} B_{n,p}(j)}
+       {\sum_{j=x_{T^-}}^{n} B_{n,p}(j)}.
+\]
+The proof first shows each cutoff \(x_i\) is positive, so the lower tail is the range \(0,\ldots,x_T-1\).}
+
+\statement{Binomial-to-Poisson tail limit}
+{binomialPMF_tendsto_poissonPMF; binomialLowerTail_tendsto_poissonLowerTail; binomialUpperTail_tendsto_poissonUpperTail}
+{If \(n p_n\to r\), then for each fixed \(k\),
+\[
+  B_{n,p_n}(k)\longrightarrow e^{-r}\frac{r^k}{k!}.
+\]
+The corresponding finite lower tails and upper tails converge to the Poisson tails
+\[
+  L_m(\mu)=\sum_{j=0}^{m}e^{-\mu}\frac{\mu^j}{j!},
+  \qquad
+  U_k(\mu)=\sum_{j\geq k}e^{-\mu}\frac{\mu^j}{j!}.
+\]}
+\support{Supporting normalizations and complement identities: \lean{binomialPMF_sum_range_eq_one; poissonUpperTail_eq_one_sub_lower; hasSum_poissonPMF}.}
+
+\statement{Poisson crossover existence}
+{poissonCrossoverCondition_iff; poissonCrossover_exists_of_bracket; poissonCrossover_exists_of_reverse_at}
+{The limiting crossover equation is
+\[
+  L_{k-2}(\mu)=U_k(\mu).
+\]
+If \(a\leq b\), \(U_k(a)\leq L_{k-2}(a)\), and \(L_{k-2}(b)\leq U_k(b)\), then there exists
+\[
+  \mu\in[a,b]\quad\text{with}\quad L_{k-2}(\mu)=U_k(\mu).
+\]
+The specialized theorem uses \(a=0\) and any nonnegative right endpoint where the inequality has reversed.}
+
+\statement{Asymptotic delivery-ratio expansion}
+{adellJodraAsymptoticInput; drStar_expansion_of_lambda_expansion}
+{Under the named asymptotic input
+\[
+  \lambda_k^*=k-\frac{5}{6}+\BigO(k^{-1}),
+\]
+the selected delivery ratio
+\[
+  \DR_k^*=\frac{\lambda_k^*}{k}
+\]
+satisfies
+\[
+  \DR_k^*
+  =
+  1-\frac{5}{6k}+\BigO(k^{-2}).
+\]
+This theorem is conditional on the external Poisson-median asymptotic boundary.}
+
+\statement{Gap tier}
+{no_achievable_in_gap; gap_tier}
+{If two adjacent ceiling cutoffs coincide,
+\[
+  x_i=x_j,
+\]
+then no integer \(X\) satisfies
+\[
+  x_i\leq X<x_j.
+\]
+}
+
+\problem{C3}{Lyapunov Radius of Validity}
+
+\textsc{Notation.}
+The setup stores positive constants
+\(\alpha_{\min},\alpha_{\max},q,r_0,\lVert A\rVert,M\) and defines
+\[
+  r_*=\min\left(r_0,\frac{q}{2\lVert A\rVert M}\right),
+  \qquad
+  c_*=\frac{q}{2\alpha_{\max}}.
+\]
+For a perturbation point \(P\), write \(\rho=\lVert\delta\rVert\), \(V=P.V\), and \(\dot V=P.Vdot\).
+
+\statement{Eigenvalue sandwich}
+{eigen_sandwich_lower; eigen_sandwich_upper; eigen_sandwich}
+{The Lyapunov quadratic value satisfies
+\[
+  \alpha_{\min}\rho^2\leq V\leq\alpha_{\max}\rho^2.
+\]
+The lower and upper inequalities are available both separately and as a conjunction.}
+
+\statement{Derivative decomposition and pointwise bounds}
+{vdot_decomposition; quadratic_term_lower; negative_quadratic_term_upper; remainder_abs_bound; remainder_upper_bound}
+{The derivative decomposes as
+\[
+  \dot V=-Q(\delta)+R(\delta),
+\]
+with
+\[
+  q\rho^2\leq Q(\delta),
+  \qquad
+  |R(\delta)|\leq \lVert A\rVert M\rho^3.
+\]
+Hence \(-Q(\delta)\leq -q\rho^2\) and \(R(\delta)\leq \lVert A\rVert M\rho^3\).}
+
+\statement{Critical-ball derivative bound}
+{vdot_le_quadratic_plus_cubic; vdot_bound_on_ball}
+{Combining the previous inequalities gives
+\[
+  \dot V\leq -q\rho^2+\lVert A\rVert M\rho^3.
+\]
+Inside the critical ball \(\rho<r_*\), the cubic term consumes at most half the quadratic margin:
+\[
+  \dot V\leq -\frac{q}{2}\rho^2.
+\]}
+
+\statement{Main radius theorem}
+{criticalRadius_pos; lyapunov_radius_of_validity}
+{The radius \(r_*\) is positive.  If \(\rho<r_*\), then
+\[
+  \dot V\leq -c_* V
+  =
+  -\frac{q}{2\alpha_{\max}}\,V.
+\]
+This is the formal Lyapunov radius-of-validity theorem.}
+
+\statement{Sublevel-set corollaries}
+{sublevel_inside_critical_ball; sublevel_boundary_vdot_nonpos}
+{If \(V\leq V_0\) and
+\[
+  V_0<\alpha_{\min}r_*^2,
+\]
+then \(\rho<r_*\).  On the boundary \(V=V_0\) of such a sublevel set,
+\[
+  \dot V\leq0.
+\]}
+
+\problem{C4}{Temporal Transport Factorization}
+
+\textsc{Notation.}
+Let \(D\subseteq F\) be delivery and feasibility events in a probability space.  Define
+\[
+  \DR=\Prob(D),
+  \qquad
+  \ST=\Prob(F),
+  \qquad
+  \eta=\Prob(D)/\Prob(F).
+\]
+
+\statement{Delivery implies feasibility}
+{delivery_inter_infeasible_eq_empty; delivery_zero_when_infeasible; delivery_measure_le_feasible}
+{The event-level inclusion \(D\subseteq F\) yields
+\[
+  D\cap F^c=\emptyset,
+  \qquad
+  \Prob(D\cap F^c)=0,
+  \qquad
+  \Prob(D)\leq\Prob(F).
+\]}
+
+\statement{Exact factorization}
+{exact_factorization; exact_factorization_real}
+{Whenever \(\ST\neq0\),
+\[
+  \DR=\ST\,\eta.
+\]
+The theorem is proved both in the extended nonnegative-real measure layer and in the real-valued ratio layer.}
+
+\statement{Augmentation monotonicity}
+{st_monotone; stReal_monotone}
+{For an augmentation \(F\subseteq F'\) with the same underlying measure,
+\[
+  \ST\leq\ST'.
+\]
+The same monotonicity holds after conversion to real-valued factors.}
+
+\statement{Braess localization}
+{braess_in_eta; braess_in_etaReal}
+{If an augmentation has \(\ST'>0\), preserves the measure, and nevertheless decreases delivery ratio,
+\[
+  \DR'<\DR,
+\]
+then the decrease is localized in the efficiency factor:
+\[
+  \eta'<\eta.
+\]}
+
+\problem{C5}{Three-Factor Sparse Law}
+
+\textsc{Notation.}
+The scalar setup records \(\ST\), \(\eta\), \(E[H]\), a Lyapunov exponent \(\lambda<0\), and \(\DR=\ST\eta\).  Define
+\[
+  \etaL=\exp(E[H]\lambda),
+  \qquad
+  \PhiR=\eta/\etaL.
+\]
+
+\statement{Exact three-factor law}
+{three_factor}
+{The sparse-law delivery ratio factors as
+\[
+  \DR=\ST\,\etaL\,\PhiR.
+\]
+This is an algebraic refinement of \(\DR=\ST\eta\) by inserting the chain attenuation factor and residual routing distortion.}
+
+\statement{Chain attenuation properties}
+{etaLyap_pos; etaLyap_lt_one; phi_pos}
+{The chain attenuation is strictly positive,
+\[
+  0<\etaL,
+\]
+and, when \(E[H]>0\) and \(\lambda<0\),
+\[
+  \etaL<1.
+\]
+If \(\eta>0\), then \(\PhiR>0\).}
+
+\statement{Negative mean log-hop exponent}
+{lyapunov_exponent_neg}
+{For finitely many hop probabilities \(p_i\in(0,1)\) with \(n>0\),
+\[
+  \frac{1}{n}\sum_{i=1}^{n}\log p_i < 0.
+\]
+This supplies the sign condition used by the chain attenuation factor.}
+
+\statement{Morphology vocabulary}
+{morphologySlope; isTrap; isCluster}
+{For two residual measurements \((\Phi_1,E_1)\) and \((\Phi_2,E_2)\) with positive residuals and \(E_1\neq E_2\), define
+\[
+  \gamma
+  =
+  \frac{\log \Phi_2-\log \Phi_1}{E_2-E_1}.
+\]
+The formal classes are \(\gamma<0\) for a trap and \(\gamma>0\) for a cluster.}
+
+\end{document}
