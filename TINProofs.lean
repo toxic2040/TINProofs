@@ -32,4 +32,8 @@ import TINProofs.C7.Defs
 import TINProofs.C7.SupportFailure
 import TINProofs.C8.Defs
 import TINProofs.C8.BoundaryRedescription
+import TINProofs.C9.Defs
+import TINProofs.C9.CouplingBound
+import TINProofs.C10.Defs
+import TINProofs.C10.LocalResponse
 import TINProofs.Statements

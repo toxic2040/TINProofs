@@ -1,5 +1,5 @@
 /-
-  Paper-to-Lean cross-reference for TINProofs C1-C8.
+  Paper-to-Lean cross-reference for TINProofs C1-C10.
 
   Each section quotes the manuscript theorem in natural language,
   then checks the corresponding Lean declaration. The #check commands
@@ -15,6 +15,8 @@
     C6  Theorem 1      (Ahlfors covering and volume scaling)
     C7  Theorem 2      (support failure via rate-distortion)
     C8  Theorem 3      (boundary re-description)
+    C9  Coupling bound (Pinsker and Cauchy-Schwarz)
+    C10 Fixed-oracle local response
 -/
 import TINProofs.C1.Crossover
 import TINProofs.C2.Absorbing
@@ -29,6 +31,8 @@ import TINProofs.C5.Classification
 import TINProofs.C6.AhlforsCovering
 import TINProofs.C7.SupportFailure
 import TINProofs.C8.BoundaryRedescription
+import TINProofs.C9.CouplingBound
+import TINProofs.C10.LocalResponse
 
 -- ═══════════════════════════════════════════════════════════════════
 -- C1. Commodity Hull Theorem  (Theorem 6.3)
@@ -291,3 +295,43 @@ import TINProofs.C8.BoundaryRedescription
 #check @TINProofs.C8.resolution_floor
 #check @TINProofs.C8.boundary_summary_optimal
 #check @TINProofs.C8.boundary_redescription
+
+
+-- ===================================================================
+-- C9. Pinsker Coupling Bound
+-- ===================================================================
+
+/- **Paper.** The coupling between reachability S_T and routing efficiency
+    eta is bounded by conditional mutual information and by conditional
+    variances:
+      |Cov(S_T, eta | G)| <= sqrt(2 * MI(S_T; eta | G))
+      |Cov(S_T, eta | G)| <= sqrt(Var(S_T | G) * Var(eta | G)).
+    Zero mutual information, known infrastructure variance, or saturated
+    routing variance forces zero covariance.
+
+    **Lean.** `pinsker_coupling_bound`,
+    `cauchy_schwarz_coupling_bound`,
+    `coupling_vanishes_known_infrastructure`,
+    `coupling_vanishes_saturated_routing`, `decoupling_criterion`. -/
+#check @TINProofs.C9.pinsker_coupling_bound
+#check @TINProofs.C9.cauchy_schwarz_coupling_bound
+#check @TINProofs.C9.coupling_vanishes_known_infrastructure
+#check @TINProofs.C9.coupling_vanishes_saturated_routing
+#check @TINProofs.C9.decoupling_criterion
+
+
+-- ===================================================================
+-- C10. Fixed-Oracle Local Response
+-- ===================================================================
+
+/- **Paper.** Under oracle independence, a hazard impulse at time t
+    has no positive-lag retarded response: K_R(ell > 0) = 0. A
+    nonzero positive-lag response contradicts the locality hypothesis,
+    so route-state autocorrelation cannot be treated as a fluctuation-
+    dissipation shortcut for K_R.
+
+    **Lean.** `response_vanishes_at_positive_lag`,
+    `response_kernel_local`, `no_fdr_shortcut`. -/
+#check @TINProofs.C10.response_vanishes_at_positive_lag
+#check @TINProofs.C10.response_kernel_local
+#check @TINProofs.C10.no_fdr_shortcut
